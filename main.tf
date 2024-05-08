@@ -79,6 +79,10 @@ resource "aws_cloudwatch_metric_alarm" "alarms" {
   metric_name = each.value["metric_name"]
   namespace   = "AWS/ElastiCache"
 
+  dimensions = {
+    CacheClusterId = var.cache_cluster_id
+  }
+
   comparison_operator = each.value["directionality"] == "high" ? "GreaterThanOrEqualToThreshold" : "LessThanOrEqualToThreshold"
   evaluation_periods  = "1"
   statistic           = "Average"
