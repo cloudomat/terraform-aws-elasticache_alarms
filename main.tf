@@ -45,6 +45,7 @@ locals {
       metric_description = "Replication Lag"
       metric_name = "ReplicationLag"
       metric_postfix = " seconds"
+      directionality     = "high"
     },
     network_packets_per_second_allowance_exceeded = {
       low_value = var.network_packets_per_second_allowance_exceeded_high_threshold
