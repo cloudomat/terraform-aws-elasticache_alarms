@@ -1,3 +1,9 @@
+## 0.0.3
+
+BUG FIXES:
+
+* Actually alarm the given cache cluster.
+
 ## 0.0.2
 
 BUG FIXES:
