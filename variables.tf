@@ -51,6 +51,30 @@ variable "database_capacity_usage_vhigh_threshold" {
   description = "How much capacity can be consumed until a high priority alert is triggered? Set to null to disable."
 }
 
+variable "replication_lag_high_threshold" {
+  type = number
+  default = null
+  description = "How far behind can a replica be in seconds before a low priority alert is triggered? Set to null to disable."
+}
+
+variable "replication_lag_vhigh_threshold" {
+  type = number
+  default = null
+  description = "How far behind can a replica be in seconds before a high priority alert is triggered? Set to null to disable."
+}
+
+variable "network_packets_per_second_allowance_exceeded_high_threshold" {
+  type = number
+  default = null
+  description = "How many network packets can be dropped due to rate limits before a low priority alert is triggered? Set to null to disable."
+}
+
+variable "network_packets_per_second_allowance_exceeded_vhigh_threshold" {
+  type = number
+  default = 1
+  description = "How many network packets can be dropped due to rate limits before a high priority alert is triggered? Set to null to disable."
+}
+
 variable "tags" {
   type    = map(any)
   default = {}

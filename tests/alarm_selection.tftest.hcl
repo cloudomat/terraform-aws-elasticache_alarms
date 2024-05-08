@@ -8,6 +8,8 @@ variables {
   cpu_utilization_vhigh_threshold         = null
   database_capacity_usage_high_threshold  = null
   database_capacity_usage_vhigh_threshold = null
+
+  network_packets_per_second_allowance_exceeded_vhigh_threshold = null
 }
 
 run "no_alarms" {
