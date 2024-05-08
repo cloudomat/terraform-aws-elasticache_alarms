@@ -40,19 +40,19 @@ locals {
       directionality     = "high"
     },
     replication_lag = {
-      low_value = var.replication_lag_high_threshold
-      high_value = var.replication_lag_vhigh_threshold
+      low_value          = var.replication_lag_high_threshold
+      high_value         = var.replication_lag_vhigh_threshold
       metric_description = "Replication Lag"
-      metric_name = "ReplicationLag"
-      metric_postfix = " seconds"
+      metric_name        = "ReplicationLag"
+      metric_postfix     = " seconds"
       directionality     = "high"
     },
     network_packets_per_second_allowance_exceeded = {
-      low_value = var.network_packets_per_second_allowance_exceeded_high_threshold
-      high_value = var.network_packets_per_second_allowance_exceeded_vhigh_threshold
+      low_value          = var.network_packets_per_second_allowance_exceeded_high_threshold
+      high_value         = var.network_packets_per_second_allowance_exceeded_vhigh_threshold
       metric_description = "Network Packets Per Second Allowance Exceeded"
-      metric_name = "NetworkPacketsPerSecondAllowanceExceeded"
-      directionality = "high"
+      metric_name        = "NetworkPacketsPerSecondAllowanceExceeded"
+      directionality     = "high"
     }
   }
 
