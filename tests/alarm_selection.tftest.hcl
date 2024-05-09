@@ -41,7 +41,7 @@ run "alarms" {
   }
 
   assert {
-    condition     = aws_cloudwatch_metric_alarm.alarms["low_cpu_utilization"].alarm_name == "ElastiCache cluster id ${var.cache_cluster_id} CPU Utilization High"
+    condition     = aws_cloudwatch_metric_alarm.alarms["low_cpu_utilization"].alarm_name == "ElastiCache ${var.cache_cluster_id} CPU Utilization High"
     error_message = <<-EOM
     Incorrect low priority alarm name.
     Got ${aws_cloudwatch_metric_alarm.alarms["low_cpu_utilization"].alarm_name} expected ${var.cache_cluster_id} CPU Utilization High
@@ -49,7 +49,7 @@ run "alarms" {
   }
 
   assert {
-    condition     = aws_cloudwatch_metric_alarm.alarms["high_cpu_utilization"].alarm_name == "ElastiCache cluster id ${var.cache_cluster_id} CPU Utilization Very High"
+    condition     = aws_cloudwatch_metric_alarm.alarms["high_cpu_utilization"].alarm_name == "ElastiCache ${var.cache_cluster_id} CPU Utilization Very High"
     error_message = <<-EOM
     Incorrect high priority alarm name.
     Got ${aws_cloudwatch_metric_alarm.alarms["high_cpu_utilization"].alarm_name} expected ${var.cache_cluster_id} Very CPU Utilization High

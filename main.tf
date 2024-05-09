@@ -59,34 +59,47 @@ locals {
   low_priority_alarms  = { for key, value in local.var_map : "low_${key}" => merge(value, { level = "", value = value["low_value"] }) if value["low_value"] != null }
   high_priority_alarms = { for key, value in local.var_map : "high_${key}" => merge(value, { level = "high", value = value["high_value"] }) if value["high_value"] != null }
   alarms               = merge(local.low_priority_alarms, local.high_priority_alarms)
+
+  resource_name = var.cache_cluster_id
+  resource_type = "ElastiCache"
+
+  metric_namespace = "AWS/ElastiCache"
+  metric_dimensions = {
+    CacheClusterId = local.resource_name
+  }
 }
 
 resource "aws_cloudwatch_metric_alarm" "alarms" {
   for_each = local.alarms
 
-  alarm_name = join(
-    " ",
-    compact([
-      "ElastiCache cluster id",
-      var.cache_cluster_id,
-      each.value["metric_description"],
-      each.value["level"] == "high" ? "Very" : null,
-      each.value["directionality"] == "high" ? "High" : "Low"
-    ])
+  alarm_name = coalesce(
+    lookup(each.value, "alarm_name", null),
+    join(
+      " ",
+      compact([
+        local.resource_type,
+        local.resource_name,
+        each.value["metric_description"],
+        each.value["level"] == "high" ? "Very" : null,
+        each.value["directionality"] == "high" ? "High" : "Low"
+      ])
+    )
   )
-  alarm_description = "${var.cache_cluster_id} ${each.value["metric_description"]} is ${each.value["directionality"] == "high" ? "above" : "below"} ${each.value["value"]}${try(each.value["metric_postfix"], "")}"
+
+  alarm_description = coalesce(
+    lookup(each.value, "alarm_description", null),
+    "${local.resource_name} ${each.value["metric_description"]} is ${each.value["directionality"] == "high" ? "above" : "below"} ${lookup(each.value, "display_value", each.value["value"])}${try(each.value["metric_postfix"], "")}"
+  )
 
   metric_name = each.value["metric_name"]
-  namespace   = "AWS/ElastiCache"
+  namespace   = lookup(each.value, "metric_namespace", local.metric_namespace)
 
-  dimensions = {
-    CacheClusterId = var.cache_cluster_id
-  }
+  dimensions = lookup(each.value, "metric_dimensions", local.metric_dimensions)
 
   comparison_operator = each.value["directionality"] == "high" ? "GreaterThanOrEqualToThreshold" : "LessThanOrEqualToThreshold"
-  evaluation_periods  = "1"
-  statistic           = "Average"
-  period              = "300"
+  evaluation_periods  = lookup(each.value, "evaluation_periods", 1)
+  statistic           = lookup(each.value, "statistic", "Average")
+  period              = lookup(each.value, "period", 300)
   threshold           = each.value["value"]
 
   alarm_actions = each.value["level"] == "high" ? var.high_priority_alarm : var.low_priority_alarm
