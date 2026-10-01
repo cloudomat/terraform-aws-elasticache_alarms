@@ -1,3 +1,9 @@
+## 0.0.5
+
+ENHANCEMENTS:
+
+* Allows aws provider 6.x.
+
 ## 0.0.4
 
 ENHANCEMENTS:
